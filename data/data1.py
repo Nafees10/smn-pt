@@ -62,7 +62,7 @@ def tokenize(utt, vocab):
     ret = [vocab.get(tok, 0) for tok in utt.split()]
     for i, id in enumerate(ret):
         zeroCount += id == 0
-        print(f"zero: {utt.split()[i]}", file=stderr)
+        #print(f"zero: {utt.split()[i]}", file=stderr)
     return ret
 
 def embeddingsBuild(vocab, files, respPath = None):
@@ -101,8 +101,8 @@ def filesBuild(vocabPath, trainPath, testPath,\
         validPath, outDir):
     os.makedirs(outDir, exist_ok=True)
     print("Getting vocab...")
-    #vocab = vocabLoad(vocabPath)
-    vocab = vocabGen([trainPath, testPath, validPath], vocabPath=vocabPath)
+    vocab = vocabLoad(vocabPath)
+    #vocab = vocabGen([trainPath, testPath, validPath], vocabPath=vocabPath)
     print("\tdone")
 
     print("processing train data...")
@@ -127,10 +127,11 @@ def filesBuild(vocabPath, trainPath, testPath,\
 
     print("Generated required .pkl files in:", outDir)
 
-vocabPath = '/home/nafees/ddata/ubuntu/vocab.txt'
-trainPath = '/home/nafees/ddata/ubuntu/train.txt'
-testPath = '/home/nafees/ddata/ubuntu/test.txt'
-validPath = '/home/nafees/ddata/ubuntu/valid.txt'
+#vocabPath = './udc1/vocab.txt'
+vocabPath = './vocab.txt'
+trainPath = './udc1/train.txt'
+testPath = './udc1/test.txt'
+validPath = './udc1/valid.txt'
 outDir = './pkl_files'
 
 filesBuild(vocabPath, trainPath, testPath, validPath, outDir)

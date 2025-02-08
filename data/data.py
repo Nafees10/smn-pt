@@ -142,9 +142,11 @@ def filesBuild(vocabPath, responsesPath, trainPath, testPath,\
     os.makedirs(outDir, exist_ok=True)
     print("Getting vocab...")
     vocab = vocabLoad(vocabPath)
-    #vocab = vocabGen([trainPath, testPath, validPath],
-    #                 vocabPath=vocabPath,
-    #                 respPath=responsesPath)
+    """
+    vocab = vocabGen([trainPath, testPath, validPath],
+                     vocabPath=vocabPath,
+                     respPath=responsesPath)
+    """
     print("\tdone")
     responses = responsesLoad(responsesPath, vocab)
 
@@ -160,23 +162,25 @@ def filesBuild(vocabPath, responsesPath, trainPath, testPath,\
         pickle.dump(evalData, f)
     print("\tdone")
 
+    """
     print("training embeddings...")
-    #embeddingMatrix = embeddingsBuild(vocab,
-    #                                  [trainPath, validPath, testPath],
-    #                                  respPath=responsesPath)
+    embeddingMatrix = embeddingsBuild(vocab,
+                                      [trainPath, validPath, testPath],
+                                      respPath=responsesPath)
     embeddingMatrix = embeddingsLoad(vocab, embPath)
     with open(os.path.join(outDir, 'embedding.pkl'), 'wb') as f:
         pickle.dump(embeddingMatrix, f)
+    """
     print("\tdone")
 
     print("Generated required .pkl files in:", outDir)
 
-vocabPath = 'raw/vocab.txt'
-responsesPath = 'raw/responses.txt'
-trainPath = 'raw/train.txt'
-testPath = 'raw/test.txt'
-embPath = 'raw/embedding.txt'
-validPath = 'raw/valid.txt'
+vocabPath = 'vocab.orig.txt'
+responsesPath = 'udc2/responses.txt'
+trainPath = 'udc2/train.txt'
+testPath = 'udc2/test.txt'
+embPath = 'udc2/embedding.txt'
+validPath = 'udc2/valid.txt'
 outDir = './pkl_files'
 
 filesBuild(vocabPath, responsesPath, trainPath, testPath,
