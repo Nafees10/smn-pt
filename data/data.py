@@ -110,7 +110,10 @@ def dataProcess(path, vocab, responses, enforce=False):
             _, utt, valIds, invIds = \
                 line.strip().split('\t')
             utt = utt.replace("__eot__", "")
-            uttToks = [] + [tokenize(turn, vocab) for turn in utt.split("__eou__")]
+            uttToks = [] + [
+                tokenize(turn, vocab) for turn in utt.split("__eou__")
+                    if len(turn.strip()) > 0
+            ]
             valRes = [
                 responses[int(id)] for id in valIds.split('|')
                     if id != "NA"
