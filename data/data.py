@@ -184,7 +184,8 @@ responsesPath = 'udc2/responses.txt'
 trainPath = 'udc2/train.txt'
 testPath = 'udc2/test.txt'
 embPath = 'udc2/embedding.txt'
-validPath = 'udc2/valid.txt'
+#validPath = 'udc2/valid.txt'
+validPath = 'udc2/test.txt' # TODO
 outDir = './pkl_files'
 
 filesBuild(vocabPath, responsesPath, trainPath, testPath,
