@@ -307,7 +307,19 @@ def evaluate(args, model,eval_dataset, logger):
     for key in sorted(metrics.keys()):
         logger.info("  %s = %s", key.upper(), str(metrics[key]))
 
-    with open("output/out.txt", "w") as f:
-        for logit, pred in zip(preds, np.argmax(preds, axis=1)):
-            f.write(f"{logit[0]:.6f} {logit[1]:.6f} -> {pred}\n")
+    preds_out(preds, "output/out.txt")
+
     return metrics
+
+def preds_out(preds, fname):
+    f = open(fname, "w")
+    n_samples = len(preds) // 10
+    preds = torch.tensor(preds)
+    preds = torch.softmax(preds, dim=1)[:,1]
+    preds = preds.view(n_samples, -1)
+    for pred in preds:
+        max = torch.max(pred)
+        for p in pred:
+            f.write(f"{p}\t{'1' if p == max else '0'}\n")
+
+    f.close()
