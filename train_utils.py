@@ -22,13 +22,13 @@ def cal_performance(preds, labels,n_options=10):
     '''
     assert len(preds) == len(labels)
     total_num=len(preds)#500000
-    
-    
+
+
     n_samples=total_num//n_options
-    
+
     pred,label=torch.tensor(preds),torch.tensor(labels)
     pred=torch.softmax(pred,dim=1)[:,1]#p(y=1|x,w)
-    
+
     label=label.view(n_samples,-1)#50000x10
     pred=pred.view(n_samples,-1)#50000x10
     label=torch.argmax(label,dim=1,keepdim=True)#50000x1 正确选项的编号
@@ -50,7 +50,7 @@ def cal_performance(preds, labels,n_options=10):
     R10_5=torch.sum(isin_5).item()/n_samples
 
     metrics = {
-        "R10@1":R10_1, 
+        "R10@1":R10_1,
         "R10@2":R10_2,
         "R10@5":R10_5
         }
@@ -63,7 +63,7 @@ class trainer(Trainer):
 
         super().__init__(args, model, optimizer, train_iter, eval_iter, logger, valid_metric_name, num_epochs,
                          save_dir, log_steps, valid_steps, grad_clip, lr_scheduler, save_summary)
-                         
+
 
         self.args = args
         self.model = model
@@ -81,8 +81,8 @@ class trainer(Trainer):
         self.grad_clip = grad_clip
         self.lr_scheduler = lr_scheduler
         self.save_summary = save_summary
-       
-        
+
+
         if self.save_summary:
             self.train_writer = SummaryWriter(
                 os.path.join(self.save_dir, "logs", "train"))
@@ -95,18 +95,18 @@ class trainer(Trainer):
         self.init_message()
 
     def train_epoch(self):
-        
+
         self.epoch += 1
         train_start_message = "Training Epoch - {}".format(self.epoch)
         self.logger.info(train_start_message)
 
         tr_loss, nb_tr_examples, nb_tr_steps = 0, 0, 0
-        
+
         loss_func=nn.CrossEntropyLoss()
 
         for batch_id, batch in tqdm(enumerate(self.train_iter,1)):
             self.model.train()
-            
+
             utterance=batch[0].to(self.args.device)
             len_utterance=batch[1].to(self.args.device)
             num_utterance=batch[2].to(self.args.device)
@@ -273,26 +273,26 @@ def evaluate(args, model,eval_dataset, logger):
     model.eval()
     loss_func=nn.CrossEntropyLoss()
     for i,batch in tqdm(enumerate(eval_dataset)):
-        
+
         utterance=batch[0].to(args.device)
         len_utterance=batch[1].to(args.device)
         num_utterance=batch[2].to(args.device)
         response=batch[3].to(args.device)
         len_response=batch[4].to(args.device)
         properity=batch[5].to(args.device)
-        
+
         with torch.no_grad():
             logits = model(
             utterance,len_utterance,num_utterance,
-            response,len_response) 
+            response,len_response)
             tmp_eval_loss = loss_func(logits, properity)
             if args.n_gpu > 1:
                 tmp_eval_loss = tmp_eval_loss.mean()  # mean() to average on multi-gpu parallel evaluating
 
             eval_loss += tmp_eval_loss.item()
         nb_eval_steps += 1
-        
-        
+
+
         if preds is None:
             preds = logits.detach().cpu().numpy()
             labels = properity.detach().cpu().numpy()
@@ -301,11 +301,13 @@ def evaluate(args, model,eval_dataset, logger):
             labels = np.append(labels, properity.detach().cpu().numpy(), axis=0)
 
     eval_loss = eval_loss / nb_eval_steps
- 
+
     metrics = cal_performance(preds, labels)
 
     for key in sorted(metrics.keys()):
         logger.info("  %s = %s", key.upper(), str(metrics[key]))
+
+    with open("output/out.txt", "w") as f:
+        for logit, pred in zip(preds, np.argmax(preds, axis=1)):
+            f.write(f"{logit[0]:.6f} {logit[1]:.6f} -> {pred}\n")
     return metrics
-
-
