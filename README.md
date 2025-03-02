@@ -33,7 +33,7 @@ The code has been tested to work in the following environment, using miniconda3:
 Run the following to start training and evaluation:
 
 ```bash
-./2.sh
+./run2.sh
 ```
 
 It will run training with 3 fusion types: `last`, `static`, and `dynamic`. Each
