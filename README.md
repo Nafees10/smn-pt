@@ -64,3 +64,14 @@ instead of `run2.sh`.
 This will generate files named `power-log-FUSION_TYPE-PID.csv` and 
 `gpu_utilization-FUSION_TYPE-PID.log`. These files can be provided to the
 `energy_calc.py` script via CLI parameters, to calculate total energy use.
+
+## Precision
+
+To calculate precision, use the `precision.py` script after training &
+evaluation:
+
+```bash
+python precision.py last.output/out.txt
+python precision.py static.output/out.txt
+python precision.py dynamic.output/out.txt
+```
