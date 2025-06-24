@@ -40,3 +40,18 @@ It will run training with 3 fusion types: `last`, `static`, and `dynamic`. Each
 ones output will be saved in `FUSION_TYPE.output` directory.
 
 Recall metrics will be printed at end of training with each fusion type.
+
+## ROUGE
+
+Install the following packages via conda before running ROUGE computation:
+
+- `nltk`
+- `conda-forge::rouge-score`
+- `absl-py`
+- `evaluate`
+
+Run the following to compute ROUGE and print results:
+
+```bash
+python compute_rouge.py --num_of_responses 10
+```
