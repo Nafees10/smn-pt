@@ -55,3 +55,12 @@ Run the following to compute ROUGE and print results:
 ```bash
 python compute_rouge.py --num_of_responses 10
 ```
+
+## Power Usage
+
+To log data about power usage during training, use the `run2-measure.sh` script
+instead of `run2.sh`.
+
+This will generate files named `power-log-FUSION_TYPE-PID.csv` and 
+`gpu_utilization-FUSION_TYPE-PID.log`. These files can be provided to the
+`energy_calc.py` script via CLI parameters, to calculate total energy use.
