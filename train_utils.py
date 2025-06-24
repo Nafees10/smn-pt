@@ -307,19 +307,21 @@ def evaluate(args, model,eval_dataset, logger):
     for key in sorted(metrics.keys()):
         logger.info("  %s = %s", key.upper(), str(metrics[key]))
 
-    preds_out(preds, "output/out.txt")
+    preds_out(preds, labels, "output/out.txt")
 
     return metrics
 
-def preds_out(preds, fname):
+def preds_out(preds, labels, fname):
     f = open(fname, "w")
     n_samples = len(preds) // 10
     preds = torch.tensor(preds)
     preds = torch.softmax(preds, dim=1)[:,1]
     preds = preds.view(n_samples, -1)
-    for pred in preds:
+    labels = torch.tensor(labels).view(n_samples, -1)
+
+    for pred, label in zip(preds, labels):
         max = torch.max(pred)
-        for p in pred:
-            f.write(f"{p}\t{'1' if p == max else '0'}\n")
+        for p, l in zip(pred, label):
+            f.write(f"{p}\t{l}\t{'1' if p == max else '0'}\n")
 
     f.close()
