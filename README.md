@@ -16,17 +16,41 @@ The code has been tested to work in the following environment, using miniconda3:
 
 ## Setting Up
 
-1. Clone the repository
-1. Place the UDC v2 files (`train.txt` etc) into `/data/udc2`. For example:
-	`train.txt` should be located at `/data/udc2/train.txt`
+Begin by cloning the repository.
+
+### Data Preprocessing
+
+Before training can begin, the dataset needs to be transformed into some `.pkl`
+files. For this, you need the UDC v2's `.txt` files, and 2 files from the
+preprocessed `.pkl` files provided by original SMN model's authors:
+`embedding.pkl` and `worddict.pkl`.
+
+The `data/dumpVocab.py` script is used to dump vocabulary from UDC v1's
+`worddict.pkl` file into text format, resembling UDC v2's `vocab.txt`. This
+file will help make sense of the existing `embedding.pkl` we will use.
+
+The `data/data.py` script is used to convert UDC v2 format dataset into
+`.pkl` files that can be used by SMN.
+
+#### Extracting UDC v1 files:
+
 1. Download UDC v1 pkl files from
 	[here](https://1drv.ms/u/s!AtcxwlQuQjw1jGn5kPzsH03lnG6U)
-1. Extract `word2id.pkl` or similar vocabulary pkl file into `/data/vocab.pkl`
-1. Extract `word_embedding.pkl` or `embedding.pkl` to
-	`/data/pkl_files/embedding.pkl`
-1. `cd` into `/data`
-1. Run `python dumpVocab.py vocab.pkl > vocab.orig.txt`
-1. Run `python data.py`
+1. Extract `embedding.pkl` to `smn-pt/data/pkl_files/embedding.pkl`
+1. Extract `worddict.pkl` to `smn-pt/data/worddict.pkl`
+
+Dump vocab from `worddict.pkl` to UDC v2 format:
+```bash
+cd data
+python dumpVocab.py worddict.py > vocab.orig.txt
+```
+
+#### Pre-processing UDC v2 files:
+
+1. Place the UDC v2 files (`train.txt` etc) into `smn-pt/data/udc2`.
+	For example: `train.txt` should be located at `smn-pt/data/udc2/train.txt`
+1. Run `cd data; python data.py`
+1. `pkl` files will be created in the `smn-pt/data/pkl_files` directory.
 
 ## Training & Testing
 
