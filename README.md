@@ -41,6 +41,10 @@ ones output will be saved in `FUSION_TYPE.output` directory.
 
 Recall metrics will be printed at end of training with each fusion type.
 
+The code does not have an option to load an existing trained model, and run
+evaluation. Instead, evaluation is ran at end of training, and the model is
+saved.
+
 ## ROUGE
 
 Install the following packages via conda before running ROUGE computation:
