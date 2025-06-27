@@ -16,6 +16,10 @@ MODEL_CLASSES = {
     "smn":(SMNModel,SMNConfig)
 }
 
+def count_trainable_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
 def main():
 
     parser = BasicConfig()
@@ -34,6 +38,8 @@ def main():
     logger.info(args)
 
     model = model_class(args=args)
+
+    print(f"Trainable parameters: {count_trainable_parameters(model):,}")
 
     # model.to(args.device)
 
